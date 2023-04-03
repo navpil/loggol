@@ -15,8 +15,9 @@
     <packaging>pom</packaging>
 
     <properties>
-        <log4j2.version>2.12.1</log4j2.version>
-        <slf4j.version>1.7.29</slf4j.version>
+        <log4j2.version>2.20.0</log4j2.version>
+        <slf4j.version>2.0.7</slf4j.version>
+        <logback.version>1.4.6</logback.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -54,9 +55,10 @@
                 <version>${log4j2.version}</version>
             </dependency>
             <!--Log4j2 slf4j bridge-->
+            <!-- Use log4j-slf4j2-impl for Slf4j 2.x and log4j-slf4j-impl for 1.x version-->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-slf4j-impl</artifactId>
+                <artifactId>log4j-slf4j2-impl</artifactId>
                 <version>${log4j2.version}</version>
             </dependency>
             <!--Log4j2 uses slf4j-->
@@ -78,11 +80,16 @@
                 <artifactId>slf4j-jdk14</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-reload4j</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
             <!--Slf4j uses logback-->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.2.3</version>
+                <version>${logback.version}</version>
             </dependency>
             <!--Slf4j log4j 1.x bridge-->
             <dependency>

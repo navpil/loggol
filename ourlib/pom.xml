@@ -85,7 +85,7 @@
                 </dependency>
                 <dependency>
                     <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-slf4j-impl</artifactId>
+                    <artifactId>log4j-slf4j2-impl</artifactId>
                 </dependency>
 
                 <!-- Implementation -->
@@ -131,7 +131,7 @@
                 </dependency>
                 <dependency>
                     <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-slf4j-impl</artifactId>
+                    <artifactId>log4j-slf4j2-impl</artifactId>
                 </dependency>
 
                 <!--Use slf4 bridge for JUL instead of the log4j2 one, since it is less intrusive-->
@@ -350,12 +350,18 @@
                     <groupId>org.apache.logging.log4j</groupId>
                     <artifactId>log4j-to-slf4j</artifactId>
                 </dependency>
-
                 <!-- Bridge from Slf4j to JUL -->
                 <dependency>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-jdk14</artifactId>
                 </dependency>
+                <!--Why adding next dependency instead of the previous one fails with error?
+                 SLF4J: Detected both log4j-over-slf4j.jar AND bound slf4j-log4j12.jar
+                -->
+<!--                <dependency>-->
+<!--                    <groupId>org.slf4j</groupId>-->
+<!--                    <artifactId>slf4j-reload4j</artifactId>-->
+<!--                </dependency>-->
             </dependencies>
         </profile>
 
@@ -372,7 +378,7 @@
                 <!--Log4j2 provides implementation for slf4j-->
                 <dependency>
                     <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-slf4j-impl</artifactId>
+                    <artifactId>log4j-slf4j2-impl</artifactId>
                 </dependency>
             </dependencies>
         </profile>
@@ -381,6 +387,7 @@
             <id>geek-fun-2</id>
             <dependencies>
                 <!-- Following two libraries are incompatible -->
+                <!-- EDIT: for some reason the  slf4j-jcl cannot be found -->
 
                 <!--JCL bridge to Slf4j -->
                 <dependency>

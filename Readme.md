@@ -1,5 +1,18 @@
 # Logging in Java
 
+## TLDR
+
+Run `io.github.navpil.testlogging.ourlib.MainTest` with these profiles (in turn):
+
+ - jul
+ - log4j
+ - log4j2
+ - logback-fixed
+
+To see how JUL, Log4j, Log4j2, Slf4j and JCL loggers log
+
+## Generic logging libraries description
+
 There are several libraries, which can be used for logging.
 They split into API-only, Implementation-only and both.
 
@@ -59,7 +72,8 @@ API only, can use following implementations:
  - Console `slf4j-simple` (not discussed further)
  - JCL `slf4j-jcl` - which in turn will use log4j or JUL or whatever (not discussed further)
 
-Uses SPI to find implementation.
+Uses SPI to find implementation (as of `2.0.7`).
+But as of `1.7.21` what they do is to reimplement the class `org.slf4j.impl.StaticLoggerBinder`.
 
 ### Logback
 
@@ -150,7 +164,7 @@ JUL will use this property in static initializer block.
     
 **JCL** (`log4j-jcl`) will find log4j2 implementation through the SPI (or something similar).
 
-**Slf4j** (`log4j-slf4j-impl`) and **Log4j2 API** (natively supports log4j2-core) is configured with no problems.
+**Slf4j** (`log4j-slf4j2-impl`) and **Log4j2 API** (natively supports log4j2-core) is configured with no problems.
 
 **Log4j 1.x** dependencies have to be excluded and instead include jar (`log4j-1.2-api`) which mirrors the API, but logs through Log4j2.
 
@@ -193,6 +207,10 @@ Rather strange choice, but it is still possible:
 **Log4j**, **Log4j2** and **JCL** are handled in the same way as in falling back to Logback (`-Plogback`).
 
 Just instead of logback, use the `slf4j-jdk14` instead
+
+Using `slf4j-reload4j` instead of `slf4j-jdk14`, as suggested by maven results in error:
+
+    SLF4J: Detected both log4j-over-slf4j.jar AND bound slf4j-log4j12.jar
 
 ### Fallthrough to Log4j
 
