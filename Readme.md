@@ -2,14 +2,17 @@
 
 ## TLDR
 
-Run `io.github.navpil.testlogging.ourlib.MainTest` with these profiles (in turn):
+Run `io.github.navpil.loggol.ourlib.MainTest` with these profiles (in turn):
 
  - jul
  - log4j
  - log4j2
- - logback-fixed
+ - logback
 
-To see how JUL, Log4j, Log4j2, Slf4j and JCL loggers log
+To see how JUL, Log4j, Log4j2, Slf4j and JCL loggers log (both console and file).
+
+`Log4j 1.x` and `JCL` are not supported anymore, don't use them.
+Kept here only for historical purposes.
 
 ## Generic logging libraries description
 
@@ -47,6 +50,10 @@ Unfortunately there is no file format which will be automatically picked up from
 Need to provide the system property to Java machine somehow.
 Process-wide configuration.
 
+Example of configuring JUL through the cmd param:
+
+    java -Djava.util.logging.config.file=/path/to/jul.properties MainClass
+
 [Configure JUL](http://tutorials.jenkov.com/java-logging/configuration.html)
 
 [Configure JUL File Location](https://www.logicbig.com/tutorials/core-java-tutorial/logging/loading-properties.html)
@@ -70,7 +77,7 @@ API only, can use following implementations:
  - JUL `slf4j-jdk14`
  - NOP (no logging) `slf4j-nop` (not discussed further)
  - Console `slf4j-simple` (not discussed further)
- - JCL `slf4j-jcl` - which in turn will use log4j or JUL or whatever (not discussed further)
+ - JCL `slf4j-jcl` - support was apparently dropped in the Slf4j 2 (not discussed further)
 
 Uses SPI to find implementation (as of `2.0.7`).
 But as of `1.7.21` what they do is to reimplement the class `org.slf4j.impl.StaticLoggerBinder`.
@@ -96,7 +103,7 @@ If someone wants to use another logging implementation, then the log4j2-to-slf4 
 
 ## Example project
 
-We have a project `impls` which uses all the logging libraries:
+We have a project `log-apis` which uses all the logging libraries:
 
  - JUL
  - Log4j
@@ -104,7 +111,7 @@ We have a project `impls` which uses all the logging libraries:
  - JCL
  - Slf4j
  
-And we have a project `ourlib` which uses `impls`.
+And we have a project `log-impls` which uses `log-apis`.
  
 In case libraries added some implementations, such as Log4j2-core or logback, we may exclude them.
 
@@ -117,7 +124,7 @@ JCL will output through JUL or fail with Log4j error.
 
 Log4j will say:
 
-    log4j:WARN No appenders could be found for logger (io.github.navpil.testlogging.UsesLog4j).
+    log4j:WARN No appenders could be found for logger (io.github.navpil.loggol.UsesLog4j).
     log4j:WARN Please initialize the log4j system properly.
     log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
     
@@ -134,19 +141,6 @@ Slf4j will say:
     SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
 
 Slf4j can fallthrough to the Log4j2 api and vice versa.
-
-### Fixing JUL and Log4j
-
-`-Plog-config`
-
-JUL still works, but maybe we will have to provide some additional configuration for it.
-You may use another location:
-
-    java -Djava.util.logging.config.file=/path/to/app.properties MainClass
-
-Log4j simply requires log4j.xml file for it to work. You may use another location:
-
-    java -Dlog4j.configuration=file:/path/to/log4j.properties myApp 
 
 ### Fallthrough to Log4j2-core
 
@@ -194,9 +188,8 @@ This is because in the background `SLF4JBridgeHandler.install()` does this:
 
     LogManager.getLogManager().getLogger("").addHandler(new SLF4JBridgeHandler());
 
-There is a fix though, used by profile `-Plogback-fixed`:
-
-Instead of `jul-to-slf4j` use approach as in Log4j2-core, `log4j-jul`
+Therefore `logback` profile uses approach as in Log4j2-core (`log4j-jul`) instead of `jul-to-slf4j`.
+This will mean the JUL will send its output to the Log4j2, which in turn sends its output to Slf4j, which uses logback.
 
 ### Fallthrough to JUL
 

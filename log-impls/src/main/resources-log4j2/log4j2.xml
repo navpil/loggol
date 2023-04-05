@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="[LOG4J2][%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n" />
+        </Console>
+
+        <!-- File appender -->
+        <RollingFile  name="ROLLING_FILE" fileName="log4j2-log.log" filePattern="log4j2-log-%d{MM-dd-yyyy}-%i.log">
+            <PatternLayout pattern="[%d] [%X{uuid}] %5p [%t] (%F:%L) - %m%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="5 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy />
+        </RollingFile >
+
+    </Appenders>
+    <Loggers>
+        <Root level="trace" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="ROLLING_FILE" />
+        </Root>
+        <!--Special loggers-->
+        <Logger name="io.github.navpil" level="OFF" />
+        <Logger name="io.github.navpil.loggol" level="TRACE" />
+    </Loggers>
+</Configuration>
