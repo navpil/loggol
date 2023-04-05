@@ -253,6 +253,18 @@
                     <groupId>org.apache.logging.log4j</groupId>
                     <artifactId>log4j-slf4j2-impl</artifactId>
                 </dependency>
+
+                <!--And use the dependencies, same as in "unconfigured" profile,
+                because otherwise it will fail with ClassNotFound-->
+                <dependency>
+                    <groupId>ch.qos.reload4j</groupId>
+                    <artifactId>reload4j</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </dependency>
+
             </dependencies>
         </profile>
 

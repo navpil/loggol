@@ -49,6 +49,13 @@ This project uses the `optional=true` approach.
 If you run the `MainTest` file with no profiles on, you will get the exception on startup.
 To remove the exception, please use `unconfigured` profile, which shows how loggers behave when they are not configured.
 
+Please note - `log4j/reload4j` and `commons-logging` classes may be included by dependencies intended for supporting 
+other logging mechanisms.
+As an example, in case you only use `reload4j`, its implementation can be added by `slf4j-reload4j` module.
+But in case you don't use `slf4j` and thus decided not to uase `slf4j-reload4j` dependency, then `reload4j` will simply not work.
+In these cases you should include `reload4j` by itself.
+Alternatively you can still go with the setup made by this project if you don't mind few more unused jar files added.
+
 ## Logging library description
 
 ### JUL
