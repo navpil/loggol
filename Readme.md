@@ -11,8 +11,9 @@ Run `io.github.navpil.loggol.ourlib.MainTest` with these profiles (in turn):
 
 To see how JUL, Log4j, Log4j2, Slf4j and JCL loggers log (both console and file).
 
-`Log4j 1.x` and `JCL` are not supported anymore, don't use them.
-Kept here only for historical purposes.
+Alternatively run `mvn install` from the base directory, `cd log-impls` and run `run-all-profiles.cmd`
+
+`JCL` is not supported anymore, kept here for historical purposes
 
 ## Generic logging libraries description
 
@@ -22,7 +23,7 @@ They split into API-only, Implementation-only and both.
 Implementation only:
 
  - JUL (java.util.logging)
- - Log4j - deprecated, but still widely used
+ - Log4j - deprecated, but still widely used, you may use Reload4j as a direct replacement
  - Logback - uses slf4j API natively
 
 API only:
@@ -39,6 +40,14 @@ Often implementation library is used through the API, so they can be easily swit
 It's the implementation library which is configured.
 
 API libraries require usage of some implementation.
+
+`log4j/reload4j` and `common-logging` are misbehaving (in a way). 
+They either require inclusion of implementation, forcing to exclude them in an importing project.
+Or they force making them optional, which may cause `ClassNotFoundException` if no logging library is added.
+This project uses the `optional=true` approach.
+
+If you run the `MainTest` file with no profiles on, you will get the exception on startup.
+To remove the exception, please use `unconfigured` profile, which shows how loggers behave when they are not configured.
 
 ## Logging library description
 
@@ -62,9 +71,38 @@ https://github.com/openjdk/jdk/tree/master/src/java.logging/share/classes/java/u
 
 ### Log4j
 
-Deprecated. Please Use Log4j2.
+Log4j is deprecated. There are two options:
+
+ - Use Log4j2, which is a backward incompatible second version of the Log4j library
+ - Use Reload4j which is a binary compatible Log4j replacement
+
+Because Log4j/Reload4j are implementation libraries in order to use other logging implementation:
+ 
+ - Declare them as optional dependencies (`<optional>true</optional>` in maven)
+ - Exclude them in the project you intend to use them
+
+Former approach is used in this project, but if you have no control over the dependency,
+please exclude them like this:
+
+                <dependency>
+                    <groupId>io.github.navpil.loggol</groupId>
+                    <artifactId>log-apis</artifactId>
+                    <!--If log4j 1.x is used, exclude it, same for JCL-->
+                    <exclusions>
+                        <exclusion>
+                            <groupId>ch.qos.reload4j</groupId>
+                            <artifactId>reload4j</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>commons-logging</groupId>
+                            <artifactId>commons-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
 
 https://logging.apache.org/log4j/1.2/manual.html 
+
+https://reload4j.qos.ch/
 
 ### Slf4j
 
@@ -73,7 +111,7 @@ http://www.slf4j.org/
 API only, can use following implementations:
 
  - Logback `logback-classic` (native implementation)
- - Log4j 1.x `slf4j-log4j12`
+ - Log4j 1.x `slf4j-log4j12`, or a more modern `slf4j-reload4j` 
  - JUL `slf4j-jdk14`
  - NOP (no logging) `slf4j-nop` (not discussed further)
  - Console `slf4j-simple` (not discussed further)
@@ -205,11 +243,9 @@ Using `slf4j-reload4j` instead of `slf4j-jdk14`, as suggested by maven results i
 
     SLF4J: Detected both log4j-over-slf4j.jar AND bound slf4j-log4j12.jar
 
-### Fallthrough to Log4j
+### Fallthrough to Log4j/Reload4j
 
-Don't do it. Fallback to log4j2.
-
-But if you really want to do it:
+Please migrate to Log4j2.x or use Reload4j, do not use log4j 1.x directly.
 
 Use **Log4j2** bridge `log4j-jul` for **JUL**, because it works better.
 
@@ -217,7 +253,7 @@ Use Log4j2 bridge `log4j-jcl` for **JCL** because it plays nicer and does not re
 
 Use Log4j2 bridge `log4j-to-slf4j` to fallback into **Slf4j**.
 
-Use `slf4j-log412` to use log4j
+Use `slf4j-reload4j` to use log4j
  
 ## Log4j2 Configuration description
 

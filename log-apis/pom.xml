@@ -13,11 +13,27 @@
     <artifactId>log-apis</artifactId>
     <dependencies>
 
+        <!--
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <!-- Highest possible version, not supported anymore, switch to Log4j2-->
             <version>1.2.17</version>
+        </dependency>
+
+        Highest possible version of log4j is 1.2.17, please use the reload4j modern replacement:
+
+        -->
+
+        <dependency>
+            <groupId>ch.qos.reload4j</groupId>
+            <artifactId>reload4j</artifactId>
+            <!--
+            Making logging implementation optional is a good thing,
+            However this can strike you back if you forget adding the actual dependency
+            with ClassNotFound.
+            I decided to go for an optional dependency
+            -->
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -29,8 +45,13 @@
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-            <!-- Highest possible version, not supported anymore, get rid of it-->
-            <version>1.2</version>
+            <!--
+            Making logging implementation optional is a good thing,
+            However this can strike you back if you forget adding the actual dependency
+            with ClassNotFound.
+            I decided to go for an optional dependency
+            -->
+            <optional>true</optional>
         </dependency>
 
         <dependency>
