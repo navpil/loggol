@@ -27,13 +27,6 @@
         <dependency>
             <groupId>ch.qos.reload4j</groupId>
             <artifactId>reload4j</artifactId>
-            <!--
-            Making logging implementation optional is a good thing,
-            However this can strike you back if you forget adding the actual dependency
-            with ClassNotFound.
-            I decided to go for an optional dependency
-            -->
-            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -45,13 +38,6 @@
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-            <!--
-            Making logging implementation optional is a good thing,
-            However this can strike you back if you forget adding the actual dependency
-            with ClassNotFound.
-            I decided to go for an optional dependency
-            -->
-            <optional>true</optional>
         </dependency>
 
         <dependency>

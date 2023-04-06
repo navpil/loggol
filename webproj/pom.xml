@@ -15,7 +15,7 @@
     <packaging>war</packaging>
 
     <build>
-        <finalName>webproj</finalName>
+        <finalName>loggol</finalName>
     </build>
 
     <dependencies>
@@ -25,18 +25,43 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <!-- Tomcat 10 dependencies. If you're using the javax (Tomcat9) then please remove the following
+        two dependencies, recode the servlet from javax to jakarta and use the tomcat9 profile -->
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-web</artifactId>
-            <version>2.12.1</version>
+            <!-- Jakarta -->
+            <artifactId>log4j-jakarta-web</artifactId>
+            <version>${log4j2.version}</version>
         </dependency>
+
     </dependencies>
+
+    <profiles>
+
+        <profile>
+            <!-- This is for reference only, this profile will not work as you would expect, since
+            changing from javax to jakarta is not a simple dependency change -->
+            <id>tomcat9</id>
+            <dependencies>
+                <dependency>
+                    <groupId>javax</groupId>
+                    <artifactId>javaee-api</artifactId>
+                    <version>7.0</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-web</artifactId>
+                    <version>${log4j2.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
 </project>

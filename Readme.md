@@ -44,7 +44,7 @@ API libraries require usage of some implementation.
 `log4j/reload4j` and `common-logging` are misbehaving (in a way). 
 They either require inclusion of implementation, forcing to exclude them in an importing project.
 Or they force making them optional, which may cause `ClassNotFoundException` if no logging library is added.
-This project uses the `optional=true` approach.
+This project uses the `exclude` approach as the more realistic scenario.
 
 If you run the `MainTest` file with no profiles on, you will get the exception on startup.
 To remove the exception, please use `unconfigured` profile, which shows how loggers behave when they are not configured.
@@ -52,9 +52,12 @@ To remove the exception, please use `unconfigured` profile, which shows how logg
 Please note - `log4j/reload4j` and `commons-logging` classes may be included by dependencies intended for supporting 
 other logging mechanisms.
 As an example, in case you only use `reload4j`, its implementation can be added by `slf4j-reload4j` module.
-But in case you don't use `slf4j` and thus decided not to uase `slf4j-reload4j` dependency, then `reload4j` will simply not work.
-In these cases you should include `reload4j` by itself.
-Alternatively you can still go with the setup made by this project if you don't mind few more unused jar files added.
+But in case you don't use `slf4j` and thus decided not to use `slf4j-reload4j` dependency, then `reload4j` will simply not work.
+In these cases you should include `reload4j` manually.
+However, even if you don't use the `slf4j` in your project, you might need to keep the `slf4j-reload4j`, because
+for example in `log4j` profile logging for JUL bridges as follows:
+
+    JUL -> log4j2 -> slf4j -> reload4j. 
 
 ## Logging library description
 
@@ -88,24 +91,7 @@ Because Log4j/Reload4j are implementation libraries in order to use other loggin
  - Declare them as optional dependencies (`<optional>true</optional>` in maven)
  - Exclude them in the project you intend to use them
 
-Former approach is used in this project, but if you have no control over the dependency,
-please exclude them like this:
-
-                <dependency>
-                    <groupId>io.github.navpil.loggol</groupId>
-                    <artifactId>log-apis</artifactId>
-                    <!--If log4j 1.x is used, exclude it, same for JCL-->
-                    <exclusions>
-                        <exclusion>
-                            <groupId>ch.qos.reload4j</groupId>
-                            <artifactId>reload4j</artifactId>
-                        </exclusion>
-                        <exclusion>
-                            <groupId>commons-logging</groupId>
-                            <artifactId>commons-logging</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
+Later approach is used in this project, because the former one may fail with `NoClassDefFound` exception.
 
 https://logging.apache.org/log4j/1.2/manual.html 
 

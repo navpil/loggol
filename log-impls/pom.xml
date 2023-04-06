@@ -18,6 +18,17 @@
                 <groupId>io.github.navpil.loggol</groupId>
                 <artifactId>log-apis</artifactId>
                 <version>1.0-SNAPSHOT</version>
+                <!--If log4j 1.x is used, exclude it, same for JCL-->
+                <exclusions>
+                    <exclusion>
+                        <groupId>ch.qos.reload4j</groupId>
+                        <artifactId>reload4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -150,7 +161,12 @@
                     <artifactId>slf4j-reload4j</artifactId>
                 </dependency>
 
-                <!-- Implementation already in classpath -->
+                <!-- This dependency is brought transitively by slf4j-reload4j, but it does not hurt to include it manually-->
+                <dependency>
+                    <groupId>ch.qos.reload4j</groupId>
+                    <artifactId>reload4j</artifactId>
+                </dependency>
+
             </dependencies>
         </profile>
 
@@ -269,6 +285,8 @@
         </profile>
 
         <profile>
+            <!-- Because we excluded log4j and commons-logging, there will be ClassNotFound if no profile
+            is configured. This profile shows what would happen if we did not exclude these libs -->
             <id>unconfigured</id>
             <dependencies>
                 <dependency>
