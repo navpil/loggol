@@ -28,6 +28,12 @@
                         <groupId>commons-logging</groupId>
                         <artifactId>commons-logging</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <!-- We are not sure whether there is reload4j or log4j, so we'd better exclude both
+                        (even if in this case we know it's not there)-->
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
         </dependencies>
