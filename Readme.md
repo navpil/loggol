@@ -59,6 +59,9 @@ for example in `log4j` profile logging for JUL bridges as follows:
 
     JUL -> log4j2 -> slf4j -> reload4j. 
 
+Also note that you should use the libraries mentioned in an _IMPORTANT_ section in parent `pom.xml` file.
+At the very least it will force the `slf4j` version be 2.x not 1.x, so that a correct slf4j binder will be picked up.
+
 ## Logging library description
 
 ### JUL
@@ -72,6 +75,22 @@ Process-wide configuration.
 Example of configuring JUL through the cmd param:
 
     java -Djava.util.logging.config.file=/path/to/jul.properties MainClass
+
+JUL supports setting up the actual logger through the system property, but setting it up programmatically can be hard.
+One of the ways to do it in test can be putting this into the `build.pluginManagement.plugins` section in maven:
+
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>
+        <configuration>
+            <systemPropertyVariables>
+                <java.util.logging.manager>org.apache.logging.log4j.jul.LogManager</java.util.logging.manager>
+            </systemPropertyVariables>
+        </configuration>
+    </plugin>
+
+which will change JUL logging to Log4j2 logging.
 
 [Configure JUL](http://tutorials.jenkov.com/java-logging/configuration.html)
 
