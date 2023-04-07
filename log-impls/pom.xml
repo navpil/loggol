@@ -25,10 +25,6 @@
                         <artifactId>reload4j</artifactId>
                     </exclusion>
                     <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                    <exclusion>
                         <!-- We are not sure whether there is reload4j or log4j, so we'd better exclude both
                         (even if in this case we know it's not there)-->
                         <groupId>log4j</groupId>
@@ -158,10 +154,6 @@
                 </dependency>
 
                 <!-- Bridge from slf4j to log4j 1.x -->
-<!--                <dependency>-->
-<!--                    <groupId>org.slf4j</groupId>-->
-<!--                    <artifactId>slf4j-log4j12</artifactId>-->
-<!--                </dependency>-->
                 <dependency>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-reload4j</artifactId>
@@ -282,11 +274,6 @@
                     <groupId>ch.qos.reload4j</groupId>
                     <artifactId>reload4j</artifactId>
                 </dependency>
-                <dependency>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </dependency>
-
             </dependencies>
         </profile>
 
@@ -298,11 +285,6 @@
                 <dependency>
                     <groupId>ch.qos.reload4j</groupId>
                     <artifactId>reload4j</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
                 </dependency>
             </dependencies>
         </profile>

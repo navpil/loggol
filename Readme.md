@@ -41,16 +41,15 @@ It's the implementation library which is configured.
 
 API libraries require usage of some implementation.
 
-`log4j/reload4j` and `common-logging` are misbehaving (in a way). 
-They either require inclusion of implementation, forcing to exclude them in an importing project.
-Or they force making them optional, which may cause `ClassNotFoundException` if no logging library is added.
+`log4j/reload4j` is misbehaving (in a way). 
+It either requires inclusion of implementation, forcing to exclude them in an importing project.
+Or it forces making it optional, which may cause `ClassNotFoundException` if no logging library is added.
 This project uses the `exclude` approach as the more realistic scenario.
 
 If you run the `MainTest` file with no profiles on, you will get the exception on startup.
 To remove the exception, please use `unconfigured` profile, which shows how loggers behave when they are not configured.
 
-Please note - `log4j/reload4j` and `commons-logging` classes may be included by dependencies intended for supporting 
-other logging mechanisms.
+Please note - `log4j/reload4j` classes may be included by dependencies intended for supporting other logging mechanisms.
 As an example, in case you only use `reload4j`, its implementation can be added by `slf4j-reload4j` module.
 But in case you don't use `slf4j` and thus decided not to use `slf4j-reload4j` dependency, then `reload4j` will simply not work.
 In these cases you should include `reload4j` manually.
@@ -145,6 +144,11 @@ Reuses SLF4j API, so there is no sample of Logback-only
 Apache Commons Logging, previously known as Jakarta Commons Logging.
 Obsolete.
 
+It uses SPI mechanism to find logging implementation.
+In the past `slf4j` did not use SPI so it required to exclude the `commons-logging` lib.
+Since slf4j 2.x that's not the case anymore.
+`commons-logging` in classpath does not hurt.
+
 ### Log4j2
 
 Has strong emphasis on telling everyone logging through itself into log4j2-core.
@@ -206,7 +210,7 @@ All bridges, except `log4j-to-slf4j`, provided by Log4j2 expect you to log to lo
     
 JUL will use this property in static initializer block.
     
-**JCL** (`log4j-jcl`) will find log4j2 implementation through the SPI (or something similar).
+**JCL** (`log4j-jcl`) will find log4j2 implementation through the SPI.
 
 **Slf4j** (`log4j-slf4j2-impl`) and **Log4j2 API** (natively supports log4j2-core) is configured with no problems.
 
@@ -224,7 +228,7 @@ Logback is natively supported by **Slf4j**
 
 **Log4j** is excluded and `log4j-over-slf4j` is added
 
-**JCL** is excluded and `jcl-over-slf4j` is added
+**JCL** `jcl-over-slf4j` will find slf4j implementation through the SPI.
 
 **Log4j2** provides `log4j-to-slf4j` bridge
 
@@ -249,11 +253,12 @@ Rather strange choice, but it is still possible:
 
 **Log4j**, **Log4j2** and **JCL** are handled in the same way as in falling back to Logback (`-Plogback`).
 
-Just instead of logback, use the `slf4j-jdk14` instead
+Just instead of logback, use the `slf4j-jdk14` instead.
 
-Using `slf4j-reload4j` instead of `slf4j-jdk14`, as suggested by maven results in error:
+Initializing logging properties should be done programmatically.
+Check the static initializing block in `Main` class which reads `jul.properties` and then does this:
 
-    SLF4J: Detected both log4j-over-slf4j.jar AND bound slf4j-log4j12.jar
+    LogManager.getLogManager().readConfiguration(resourceAsStream)
 
 ### Fallthrough to Log4j/Reload4j
 
@@ -261,11 +266,11 @@ Please migrate to Log4j2.x or use Reload4j, do not use log4j 1.x directly.
 
 Use **Log4j2** bridge `log4j-jul` for **JUL**, because it works better.
 
-Use Log4j2 bridge `log4j-jcl` for **JCL** because it plays nicer and does not require exclusions.
+Use **Log4j2** bridge `log4j-jcl` for **JCL** (alternatively `jcl-over-slf4j` can be used).
 
-Use Log4j2 bridge `log4j-to-slf4j` to fallback into **Slf4j**.
+Use **Log4j2** bridge `log4j-to-slf4j` to fallback into **Slf4j**.
 
-Use `slf4j-reload4j` to use log4j
+Use `slf4j-reload4j` to use log4j/reload4j
  
 ## Log4j2 Configuration description
 
