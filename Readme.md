@@ -41,11 +41,6 @@ It's the implementation library which is configured.
 
 API libraries require usage of some implementation.
 
-`log4j/reload4j` is misbehaving (in a way). 
-It either requires inclusion of implementation, forcing to exclude them in an importing project.
-Or it forces making it optional, which may cause `ClassNotFoundException` if no logging library is added.
-This project uses the `exclude` approach as the more realistic scenario.
-
 If you run the `MainTest` file with no profiles on, you will get the exception on startup.
 To remove the exception, please use `unconfigured` profile, which shows how loggers behave when they are not configured.
 
@@ -346,7 +341,31 @@ The following log files are provided by Tomcat by default:
 
 ## Guidelines
 
+### Implementation vs API
+
 Do not put logging implementation/configuration into a library which is used by others.
+
+Keep only API libraries as your dependencies if you intend your project be included into another project
+(namely `org.apache.logging.log4j:log4j-api`, `org.slf4j:slf4j-api` and `commons-logging:commons-logging`).
+Make any implementations and bindings `optional` in child projects.
+Only include implementations and bindings as `compile` (or `runtime`) in the _aggregate_ project - be it a .war file
+or a main project.
+
+If your dependency includes implementation - please exclude it.
+Use correct versions of libraries in your `dependencyManagement` section,
+it's especially important for `slf4j` because even while version 2.x has backward compatible API with 1.x,
+its bindings are different.
+
+**Log4j/reload4j** is special since it's misbehaving (in a way).
+It either requires inclusion of implementation, forcing to exclude them in an importing project.
+Or it forces making it optional, which may cause `ClassNotFoundException` if no logging library is added.
+This project uses the `exclude` approach as the more realistic scenario.
+
+**JUL** is special because it requires either some static configuration
+or it should be configured through system properties.
+It does not use SPI mechanism.
+
+### Other considerations
 
 Do not forget to close MDC. 
 
