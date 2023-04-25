@@ -191,7 +191,40 @@ Slf4j will say:
 
 Slf4j can fallthrough to the Log4j2 api and vice versa.
 
-### Fallthrough to Log4j2-core
+### Configuring single logging
+
+Central libraries are `log4j2` and `slf4j`.
+
+From **JCL** bridges:
+
+ - `jcl-over-slf4j` for Slf4j
+ - `log4j-jcl` for Log4j2
+
+From **JUL** bridges:
+
+ - `jul-to-slf4j` for Slf4j
+requires additional programmatic configuration, plays nicer when JVM is not under full control, as in Java EE
+Will install additional Slf4j logger by calling `SLF4JBridgeHandler.install();`
+ - `log4j-jul` for Log4j2
+requires additional programmatic configuration, plays nicer when JVM is under full control, as in Java SE.
+Works by `System.setProperty("java.util.logging.manager", "org.apache.logging.log4j.jul.LogManager");`
+which means we should set it up at the very beginning of JVM startup.
+
+From **Reload4j** bridges:
+
+ - `log4j-over-slf4j` for Slf4j (requires jar exclusion)
+ - `log4j-1.2-api` for Log4j2 (requires jar exclusion)
+
+**Log4j2** and **Slf4j** bridge to each other:
+
+ - `log4j-to-slf4j` from Log4j2 to Slf4j
+ - `log4j-slf4j2-impl`from Slf4j to Log4j2
+
+The general approach - use bridges to `Slf4j` since it provides many ways to log, except for when logging to `Log4j2-core`.
+
+The only exception is JUL handling, because of Log4j2 and Slf4j bridges work very differently.
+
+#### Fallthrough to Log4j2-core
 
 `-Plog4j2`
 
@@ -215,7 +248,7 @@ By default reads `log4j2.xml`, but can be reset with
 
     -Dlog4j.configurationFile=MyConfigurationFile.xml
 
-### Fallthrough to Logback
+#### Fallthrough to Logback
 
 `-Plogback`
 
@@ -240,7 +273,7 @@ This is because in the background `SLF4JBridgeHandler.install()` does this:
 Therefore `logback` profile uses approach as in Log4j2-core (`log4j-jul`) instead of `jul-to-slf4j`.
 This will mean the JUL will send its output to the Log4j2, which in turn sends its output to Slf4j, which uses logback.
 
-### Fallthrough to JUL
+#### Fallthrough to JUL
 
 `-Pjul`
 
@@ -255,18 +288,18 @@ Check the static initializing block in `Main` class which reads `jul.properties`
 
     LogManager.getLogManager().readConfiguration(resourceAsStream)
 
-### Fallthrough to Log4j/Reload4j
+#### Fallthrough to Log4j/Reload4j
 
 Please migrate to Log4j2.x or use Reload4j, do not use log4j 1.x directly.
 
 Use **Log4j2** bridge `log4j-jul` for **JUL**, because it works better.
 
-Use **Log4j2** bridge `log4j-jcl` for **JCL** (alternatively `jcl-over-slf4j` can be used).
+Use **Slf4j2** bridge `jcl-over-slf4j` for **JCL** (alternatively `log4j-jcl` can be used).
 
 Use **Log4j2** bridge `log4j-to-slf4j` to fallback into **Slf4j**.
 
 Use `slf4j-reload4j` to use log4j/reload4j
- 
+
 ## Log4j2 Configuration description
 
  - Loggers - they will accept logging messages

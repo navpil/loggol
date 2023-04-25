@@ -5,7 +5,7 @@
     <parent>
         <artifactId>loggol</artifactId>
         <groupId>io.github.navpil</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -17,8 +17,8 @@
             <dependency>
                 <groupId>io.github.navpil.loggol</groupId>
                 <artifactId>log-apis</artifactId>
-                <version>1.0-SNAPSHOT</version>
-                <!--If log4j 1.x is used, exclude it, same for JCL-->
+                <version>1.0.0</version>
+                <!--If log4j 1.x / reload4j is used, exclude it-->
                 <exclusions>
                     <exclusion>
                         <groupId>ch.qos.reload4j</groupId>
@@ -126,7 +126,7 @@
             </dependencies>
         </profile>
 
-        <!-- Use log4j2 1.x as implementation -->
+        <!-- Use reload4j (the log4j 1.x replacement) as implementation -->
         <profile>
             <id>log4j</id>
             <build>
@@ -137,20 +137,21 @@
                 </resources>
             </build>
             <dependencies>
-                <!-- Bridges to Log4j2 -->
-                <dependency>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-jcl</artifactId>
-                </dependency>
+                <!-- Bridge from JUL to Log4j2. Using it, because it fits better in Java SE;
+                 use the jul-to-slf4j if you're in server environment, such as Tomcat-->
                 <dependency>
                     <groupId>org.apache.logging.log4j</groupId>
                     <artifactId>log4j-jul</artifactId>
                 </dependency>
 
-                <!-- Bridge from log4j2 to slf4j -->
+                <!-- Bridges to slf4j -->
                 <dependency>
                     <groupId>org.apache.logging.log4j</groupId>
                     <artifactId>log4j-to-slf4j</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
                 </dependency>
 
                 <!-- Bridge from slf4j to log4j 1.x -->
@@ -179,24 +180,25 @@
                 </resources>
             </build>
             <dependencies>
-                <!-- Bridge from JUL to Log4j2-->
+                <!-- Bridge from JUL to Log4j2. Using it, because it fits better in Java SE;
+                 use the jul-to-slf4j if you're in server environment, such as Tomcat-->
                 <dependency>
                     <groupId>org.apache.logging.log4j</groupId>
                     <artifactId>log4j-jul</artifactId>
                 </dependency>
 
                 <!-- Bridges to Slf4j -->
-                <!--Instead of log4j 1.x-->
+                <!--log4j 1.x-->
                 <dependency>
                     <groupId>org.slf4j</groupId>
                     <artifactId>log4j-over-slf4j</artifactId>
                 </dependency>
-                <!--Instead of commons-logging-->
+                <!--commons-logging-->
                 <dependency>
                     <groupId>org.slf4j</groupId>
                     <artifactId>jcl-over-slf4j</artifactId>
                 </dependency>
-                <!--Log4j2 provides fallthrough to slf4j-->
+                <!--Log4j2-->
                 <dependency>
                     <groupId>org.apache.logging.log4j</groupId>
                     <artifactId>log4j-to-slf4j</artifactId>
@@ -228,23 +230,18 @@
                     <groupId>org.slf4j</groupId>
                     <artifactId>log4j-over-slf4j</artifactId>
                 </dependency>
-                <!--Instead of commons-logging-->
-
+                <!--commons-logging-->
                 <dependency>
                     <groupId>org.slf4j</groupId>
                     <artifactId>jcl-over-slf4j</artifactId>
                 </dependency>
-                <!-- It is actually possible to use Log4j2 bridge here instead of slf4j bridge-->
-<!--                <dependency>-->
-<!--                    <groupId>org.apache.logging.log4j</groupId>-->
-<!--                    <artifactId>log4j-jcl</artifactId>-->
-<!--                </dependency>-->
-                <!--Log4j2 provides fallthrough to slf4j-->
+                <!--Log4j2-->
                 <dependency>
                     <groupId>org.apache.logging.log4j</groupId>
                     <artifactId>log4j-to-slf4j</artifactId>
                 </dependency>
-                <!-- Bridge from Slf4j to JUL -->
+
+                <!-- Implementation -->
                 <dependency>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-jdk14</artifactId>

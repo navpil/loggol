@@ -5,7 +5,7 @@
     <parent>
         <artifactId>loggol</artifactId>
         <groupId>io.github.navpil</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>io.github.navpil.loggol</groupId>
             <artifactId>log-impls</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
 
         <!-- Tomcat 10 dependencies. If you're using the javax (Tomcat9) then please remove the following
@@ -37,7 +37,6 @@
             <groupId>org.apache.logging.log4j</groupId>
             <!-- Jakarta -->
             <artifactId>log4j-jakarta-web</artifactId>
-            <version>${log4j2.version}</version>
         </dependency>
 
     </dependencies>
@@ -58,7 +57,6 @@
                 <dependency>
                     <groupId>org.apache.logging.log4j</groupId>
                     <artifactId>log4j-web</artifactId>
-                    <version>${log4j2.version}</version>
                 </dependency>
             </dependencies>
         </profile>

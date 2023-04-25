@@ -6,52 +6,27 @@
 
     <groupId>io.github.navpil</groupId>
     <artifactId>loggol</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <modules>
         <module>log-apis</module>
         <module>log-impls</module>
         <module>webproj</module>
+        <module>loggol-bom</module>
     </modules>
     <packaging>pom</packaging>
-
     <properties>
-        <log4j2.version>2.20.0</log4j2.version>
-        <slf4j.version>2.0.7</slf4j.version>
-        <logback.version>1.4.6</logback.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-
-            <!-- IMPORTANT! Include the following libraries into the dependency management [BEGIN] -->
-            <!-- API libraries [BEGIN] -->
             <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
+                <groupId>io.github.navpil.loggol</groupId>
+                <artifactId>loggol-bom</artifactId>
+                <version>1.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-api</artifactId>
-                <version>${log4j2.version}</version>
-            </dependency>
-
-            <!-- Implementation libraries [BEGIN]-->
-            <dependency>
-                <groupId>ch.qos.reload4j</groupId>
-                <artifactId>reload4j</artifactId>
-                <version>1.2.25</version>
-            </dependency>
-
-            <dependency>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-                <!-- Highest possible version, not supported anymore, get rid of it-->
-                <version>1.2</version>
-            </dependency>
-            <!-- Implementation libraries [END]-->
-            <!-- IMPORTANT! Include the libraries into the dependency management [END]-->
 
             <dependency>
                 <groupId>junit</groupId>
@@ -59,90 +34,8 @@
                 <version>4.13.1</version>
                 <scope>test</scope>
             </dependency>
-
-            <!-- Log4j2 Core-->
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-core</artifactId>
-                <version>${log4j2.version}</version>
-            </dependency>
-            <!--Log4j2 log4j 1.x bridge-->
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-1.2-api</artifactId>
-                <version>${log4j2.version}</version>
-            </dependency>
-            <!--Log4j2 jcl bridge-->
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-jcl</artifactId>
-                <version>${log4j2.version}</version>
-            </dependency>
-            <!--Log4j2 jul bridge-->
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-jul</artifactId>
-                <version>${log4j2.version}</version>
-            </dependency>
-            <!--Log4j2 slf4j bridge-->
-            <!-- Use log4j-slf4j2-impl for Slf4j 2.x and log4j-slf4j-impl for 1.x version-->
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-slf4j2-impl</artifactId>
-                <version>${log4j2.version}</version>
-            </dependency>
-            <!--Log4j2 uses slf4j-->
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-to-slf4j</artifactId>
-                <version>${log4j2.version}</version>
-            </dependency>
-
-            <!--Slf4j uses log4j 1.x-->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-reload4j</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <!--Slf4j uses jul-->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-jdk14</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <!--Slf4j uses logback-->
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
-            <!--Slf4j log4j 1.x bridge-->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>log4j-over-slf4j</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <!--Slf4j jcl bridge-->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jcl-over-slf4j</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <!--Slf4j jul bridge-->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jul-to-slf4j</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
-
     <build>
         <plugins>
             <plugin>
