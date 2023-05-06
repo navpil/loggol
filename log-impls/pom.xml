@@ -275,8 +275,8 @@
         </profile>
 
         <profile>
-            <!-- Because we excluded log4j and commons-logging, there will be ClassNotFound if no profile
-            is configured. This profile shows what would happen if we did not exclude these libs -->
+            <!-- Because we excluded log4j/reload4j, there will be ClassNotFound if no profile is configured.
+            This profile shows what would happen if we did not exclude this lib -->
             <id>unconfigured</id>
             <dependencies>
                 <dependency>
